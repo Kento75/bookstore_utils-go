@@ -14,6 +14,18 @@ func TestNewError(t *testing.T) {
 	assert.EqualValues(t, "this is the message", err.Error())
 }
 
+func TestNewRestError(t *testing.T) {
+	err := NewRestError("this is the message", errors.New("Causes of error"))
+
+	assert.NotNil(t, err)
+	assert.EqualValues(t, http.StatusNotImplemented, err.Status)
+	assert.EqualValues(t, "this is the message", err.Message)
+	assert.EqualValues(t, "rest_error", err.Error)
+
+	assert.NotNil(t, 1, len(err.Causes))
+	assert.EqualValues(t, "Causes of error", err.Causes[0])
+}
+
 func TestNewInternalServerError(t *testing.T) {
 	err := NewInternalServerError("this is the message", errors.New("Causes of error"))
 
